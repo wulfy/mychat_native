@@ -1,0 +1,25 @@
+{
+  "name": "calendier",
+  "description": ".bowerrc contient le directory de destination",
+  "main": "",
+  "moduleType": [],
+  "authors": [
+    "ludo"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "jslib",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap" : ">3.3.6",
+    "jquery-modal" : ">0.3.0",
+    "jquery": ">=1.7.1",
+    "moment": ">=2.5.0"
+  }
+}
