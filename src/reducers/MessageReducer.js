@@ -16,7 +16,7 @@ export default function MessageReducer(state = defaultState, action) {
       let {message} = currentAction;
       var {messages,...rest} = state;
       let {type,login,command,data} = message;
-      var color = login==SERVER_LOGIN?'blue':'';
+      var color = login==SERVER_LOGIN?'blue':'default';
       color = type==TYPE_ERROR?"red":color;
 
       let newMessage = {message:data,command:command, type:type, login:login, style:{color:color}};

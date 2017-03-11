@@ -97,7 +97,7 @@ export default class Smiley{
 	 		text = null;
 
 	 		if(typeof filterData.matches[i] != 'undefined')
-	 			images = <Image source="http://www.infowebmaster.fr/img/sdz/rouge.png" />;
+	 			images = <Image source={{uri:"http://www.infowebmaster.fr/img/sdz/rouge.png"}} />;
 
 	 		if(typeof filterData.texts[i] != 'undefined')
 	 			domValue.push(<View>
