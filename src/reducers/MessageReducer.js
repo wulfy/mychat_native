@@ -1,39 +1,45 @@
 import {default as PluginsHelper}  from '../lib/pluginsHelper'; 
 
-const defaultState = {messages:[]};
+const defaultState = {messages:[],error_messages:[]};
 const TYPE_ERROR = 'error';
 const SERVER_LOGIN = 'server';
-const pluginsHelperObj = new PluginsHelper;
+const pluginsHelperObj = new PluginsHelper();
 console.log(PluginsHelper);
 
 export default function MessageReducer(state = defaultState, action) {
+
+  if(action.type === "SOCKET_MESSAGE_RECEIVED" || action.type === "SOCKET_ERROR_MESSAGE")
+  {
+    var {messages,error_messages,...rest} = state;
+    var currentAction = action;
+    var {data,login} = currentAction.message;
+    var {text,date} = data;
+    currentAction = {...currentAction,...pluginsHelperObj.apply(currentAction)};
+        data =  currentAction.message.data;
+    text = data.text;
+    date = data.date;
+    console.log("currentAction");
+      console.log(currentAction);
+  }
   switch(action.type) {
     case "SOCKET_MESSAGE_RECEIVED":
-      console.log("message reducer");
-      
-
-      var currentAction = action;
-      let {message} = currentAction;
-      var {messages,...rest} = state;
-      let {type,login,command,data} = message;
-      var color = login==SERVER_LOGIN?'blue':'default';
-      color = type==TYPE_ERROR?"red":color;
-
-      let newMessage = {message:data,command:command, type:type, login:login, style:{color:color}};
+      console.log("message reducer"); 
+      console.log(action);
+     
+      let color = login===SERVER_LOGIN?'blue':'';
+      console.log("data");
+      console.log(data);
+      console.log(text);
+      let newMessage = {text:text,login:login, style:{color:color}, timestamp:date};
 
       currentAction = {...currentAction,message:newMessage};
-
-      console.log("currentAction");console.log(currentAction);
       
-      currentAction = {...currentAction,...pluginsHelperObj.apply(currentAction)};
-      console.log("currentAction");
-      console.log(currentAction);
       messages.push(currentAction.message)
-      return {...rest,type:'message',messages:messages} ;
+      return {...state,type:'message',messages:messages} ;
     case "SOCKET_ERROR_MESSAGE":
-        var {messages,...rest} = state; 
-        messages.push({message:action.message,style:{color:"red"}})
-        return {...rest,type:"message",messages:messages} ;
+
+        error_messages.push({text:data,style:{color:"red"}});
+        return {...rest,type:"message",error_messages:error_messages} ;
     default:
       return state;
   }

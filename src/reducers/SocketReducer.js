@@ -1,4 +1,4 @@
-const defaultState = {};
+const defaultState = {connected:false};
 
 export default function SocketReducer(state = defaultState, action) {
   switch(action.type) {

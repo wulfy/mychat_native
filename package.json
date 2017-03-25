@@ -9,10 +9,14 @@
 	"dependencies": {
 		"react": "15.4.2",
 		"react-native": "^0.42.0",
+		"react-dom": "^15.4.2",
     	"react-redux": ">=4.0.0",
+    	"react-router": ">=1.0.0",
     	"redux": ">=3.0.0",
     	"superagent": ">=0.21.0",
-    	"websocket": ">=1.0.24"
+    	"websocket": ">=1.0.24",
+    	"socket.io-client" : ">=1.7.3",
+    	"react-router-dom": ">=1.0.0"
 	},
 	"devDependencies": {
 		"babel-jest": "19.0.0",

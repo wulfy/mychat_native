@@ -19,7 +19,8 @@ export default connect(state => ({ message: state.message}))(
   render() 
   {
   	let messages = this.props.message ? this.props.message.messages : [];
-  	messages = typeof messages != "undefined" ? messages  : [];
+    messages = typeof messages !== "undefined" ? messages  : [];
+
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     var datasource = ds.cloneWithRows(messages);
     console.log("rendering message");
@@ -38,7 +39,7 @@ export default connect(state => ({ message: state.message}))(
                   <Text className="message" style={data.style}>{data.login}</Text> 
                 </View>
                 <View style={{float:'right',width:'70%',height:50,backgroundColor:'powderblue'}}>
-                  {data.message}
+                  {data.text}
                 </View>
               </View>
             }

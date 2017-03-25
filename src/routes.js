@@ -6,9 +6,9 @@ import Channel from './templates/Channel';
 import Home from './templates/Home'; 
 
 export default (
-  <Route name="app" component={App} path="/">
+  <App>
     <Route component={Channel} path="/channel/:chanId" />
-    <Route component={Home} path="/" />
-  </Route>
+    <Route component={Home} path="/home" />
+  </App>
 
 );

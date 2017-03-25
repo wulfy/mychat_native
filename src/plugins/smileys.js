@@ -5,66 +5,35 @@ import {
   Image,
   View
 } from 'react-native';
-/*
+
+const smileysCharMapping = {
+"<:)" : "::ange::" ,
+">:(" : "::angry::",
+"oO" : "::blink::",
+";)" : "::clin::",
+":p" : "::langue::"
+};
+const smileysMapping = {
+"ange" : "http://www.infowebmaster.fr/img/sdz/ange.png",
+"angry" : "http://www.infowebmaster.fr/img/sdz/angry.gif",
+"blink" : "http://www.infowebmaster.fr/img/sdz/blink.gif",
+"clin" : "http://www.infowebmaster.fr/img/sdz/clin.png",
+"langue" : "http://www.infowebmaster.fr/img/sdz/langue.png"
+};
+
+
+function isOdd(num) { return num % 2;}
+
+function replaceCharBySmileysCode(text)
 {
-  type: 'button',
-  props: {
-    className: 'button button-blue',
-    children: {
-      type: 'b',
-      props: {
-        children: 'OK!'
-      }
-    }
-  }
+	var str = text;
+	var last = {};
+	str = str.replace(/\<:\)|\>:\(|oO|;\)/gi, function(matched){
+	  return smileysCharMapping[matched];
+	});
+
+	return str;
 }
-
-*/
-
-function getAllIndexOf(text,searchedString)
-{
-	var matches = [];
-	var match = [];
-	var texts = [];
-	var searchedLength = searchedString.length;
-	var previousStartIndex =0
-	var previousSmileyIndex = 0;
-	var regexp = new RegExp(searchedString,"g");
-	var watchdog = 0;
-
-
-
-	while ((match = regexp.exec(text)) != null && watchdog <1000) {
-
-		watchdog ++;
-
-	  if(previousStartIndex<match.index)
-	  {
-	  	texts[previousSmileyIndex] = text.substring(previousStartIndex,match.index);
-	  }
-
-	  matches[previousSmileyIndex] = match.index;
-	  previousSmileyIndex++;
-
-	  previousStartIndex = regexp.lastIndex;
-	  console.log("previousStartIndex"+ previousStartIndex);
-	  console.log("match.index"+ match.index);
-
-	}
-
-	if(previousStartIndex < text.length)
-	{
-
-		texts[previousSmileyIndex] = text.substring(previousStartIndex);
-	}
-
-
-	console.log(" matches " + previousStartIndex);
-	console.log(matches);
-
-	return {matches:matches,texts:texts, size:previousSmileyIndex};
-}
-
 
 export default class Smiley{
 
@@ -75,46 +44,33 @@ export default class Smiley{
 
  changeAction = (action) =>
  {
- 	//console.log("change action :");
- 	//console.log(action);
  	let newAction = action;
- 	let searchedString = "smile";
+ 	let searchedString = ":\\)";
  	var filterData = "";
  	var domValue = [];
+ 	console.log(action);
+ 	let {message} = action;
+ 	let {data,login} = message;
+    let {text,date} = data;
 
- 	if(action.message)
+ 	if(text)
  	{
  		
- 		filterData = getAllIndexOf(action.message.message,searchedString);
- 		console.log("filter data");
- 		console.log(filterData);
- 		let images = null;
-	 	let text = null;
-
-	 	for(var i=0; i<=filterData.size;i++)
+ 		var transformedText = replaceCharBySmileysCode(text);
+	 	var tabTransform = transformedText.split("::");
+	 	var newText = "";
+	 	let currentText = "";
+	 	for(let i=0; i<tabTransform.length;i++)
 	 	{
-	 		images = null;
-	 		text = null;
-
-	 		if(typeof filterData.matches[i] != 'undefined')
-	 			images = <Image source={{uri:"http://www.infowebmaster.fr/img/sdz/rouge.png"}} />;
-
-	 		if(typeof filterData.texts[i] != 'undefined')
-	 			domValue.push(<View>
-	 							<Text> {filterData.texts[i]}</Text> 
-	 							{images}
-	 						   </View>);
-	 		else if(images != null )
-	 			domValue.push(images);
-
-		 	
+	 		currentText = tabTransform[i];
+	 		if(isOdd && smileysMapping[currentText])
+	 			domValue.push(<Image key={'msg-img'+i} source={{uri:smileysMapping[currentText]}} />);
+	 		else if(currentText.length > 0)
+				domValue.push(<Text> {currentText}</Text>);		 	
 	 	}
 
-	 	domValue = domValue.length > 0 ?  domValue : action.message.message;
-
-	 	
- 		newAction = {...action,message:{...action.message,message:domValue}};
- 		console.log("newAction");
+	 	newAction = {...action,message:{...message,data:{...data,text:domValue}}};
+ 		console.log("newAction smileys");
  		console.log(newAction);
  	}
 
